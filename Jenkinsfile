@@ -4,7 +4,7 @@ pipeline {
                 choice(name: 'Deployment_Type', choices:['apply','destroy'],description:'The deployment type')
                   }
     environment {
-        EMAIL_TO = 'fusisoft@gmail.com'
+        EMAIL_TO = 'tonneymassaquoi9@gmail.com'
     }
     stages {
         stage('1.Terraform init') {
@@ -16,7 +16,7 @@ pipeline {
         stage('2.Terraform plan') {
             steps {
                 echo 'terraform plan phase'
-                sh 'AWS_REGION=us-west-2 terraform plan'
+                sh 'AWS_REGION=us-east-1 terraform plan'
             }
         }
         stage('3.Manual Approval') {
@@ -34,18 +34,18 @@ pipeline {
         stage('4.Terraform Deploy') {              
             steps { 
                 echo 'Terraform ${params.Deployment_Type} phase'  
-                sh "AWS_REGION=us-west-2 terraform ${params.Deployment_Type} --auto-approve"
+                sh "AWS_REGION=us-east-1 terraform ${params.Deployment_Type} --auto-approve"
                 sh("""scripts/update-kubeconfig.sh""")
-               sh "AWS_REGION=us-west-2 terraform ${params.Deployment_Type} --auto-approve"
+               sh "AWS_REGION=us-east-1 terraform ${params.Deployment_Type} --auto-approve"
                 }
                 }
         stage ('5. Email Notification') {
             steps {
-               mail bcc: 'fusisoft@gmail.com', body: '''Terraform deployment is completed.
+               mail bcc: 'tonneymassaquoi9@gmail.com', body: '''Terraform deployment is completed.
                Let me know if the changes look okay.
                Thanks,
                Dominion System Technologies,
-              +1 (313) 413-1477''', cc: 'fusisoft@gmail.com', from: '', replyTo: '', subject: 'Terraform Infra deployment completed!!!', to: 'fusisoft@gmail.com'
+              +1 (682) 540-2817''', cc: 'tonneymassaquoi9@gmail.com', from: '', replyTo: '', subject: 'Terraform Infra deployment completed!!!', to: 'tonneymassaquoi9@gmail.com'
                           
                }    
           }
